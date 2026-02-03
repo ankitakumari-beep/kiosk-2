@@ -22,7 +22,7 @@ self.onmessage = (event) => {
   lines.push("----------------------------");
   lines.push(`TOTAL: ₹${totalAmount}`);
   lines.push("----------------------------");
-  lines.push("Thank you for your order 🙏");
+  lines.push("Thank you for your order ");
 
   const receiptText = lines.join("\n");
 

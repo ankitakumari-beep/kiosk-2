@@ -250,6 +250,8 @@ body {
 
 .card-header {
   padding: 20px 24px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   border-bottom: 3px solid transparent;
   background: linear-gradient(135deg, #fdf4ff 0%, #fef3c7 100%);
   border-image: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent)) 1;
@@ -573,7 +575,7 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-height: calc(100vh - 280px);
+  max-height: calc(100vh - 180px);
   overflow-y: auto;
   padding-right: 8px;
 }
