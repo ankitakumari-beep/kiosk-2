@@ -1,5 +1,5 @@
 const DB_NAME = "hyper_kitchen_hub";
-const DB_VERSION = 2; 
+const DB_VERSION = 2;
 
 let db = null;
 
@@ -42,7 +42,6 @@ export function initStorage() {
     };
   });
 }
-
 
 function getObjectStore(storeName, mode = "readonly") {
   if (!db) {
@@ -109,37 +108,43 @@ export function deleteRecord(storeName, key) {
   });
 }
 
-
 export function hasAnyRecord(storeName) {
   return new Promise((resolve, reject) => {
-    if (!db) {
-      reject(new Error("[Storage] Database not initialized"));
-      return;
+    try {
+      if (!db) {
+        throw new Error("[Storage] Database not initialized");
+      }
+
+      const tx = db.transaction(storeName, "readonly");
+      const store = tx.objectStore(storeName);
+      const req = store.count();
+
+      req.onsuccess = () => resolve(req.result > 0);
+      req.onerror = () => reject(req.error);
+    } catch (err) {
+      reject(err);
     }
-
-    const tx = db.transaction(storeName, "readonly");
-    const store = tx.objectStore(storeName);
-    const req = store.count();
-
-    req.onsuccess = () => resolve(req.result > 0);
-    req.onerror = () => reject(req.error);
   });
 }
+
 export function hasRecord(storeName, key) {
   return new Promise((resolve, reject) => {
-    if (!db) {
-      reject(new Error("[Storage] Database not initialized"));
-      return;
+    try {
+      if (!db) {
+        throw new Error("[Storage] Database not initialized");
+      }
+
+      const tx = db.transaction(storeName, "readonly");
+      const store = tx.objectStore(storeName);
+      const req = store.get(key);
+
+      req.onsuccess = () => {
+        resolve(!!req.result);
+      };
+
+      req.onerror = () => reject(req.error);
+    } catch (err) {
+      reject(err);
     }
-
-    const tx = db.transaction(storeName, "readonly");
-    const store = tx.objectStore(storeName);
-    const req = store.get(key);
-
-    req.onsuccess = () => {
-      resolve(!!req.result);
-    };
-
-    req.onerror = () => reject(req.error);
   });
 }

@@ -12,40 +12,62 @@ export function renderOrderStatusPage(order) {
   const screen = document.getElementById("successScreen");
   screen.classList.add("active");
 
-const startNewOrderBtn = document.getElementById("closeSuccessToast");
-startNewOrderBtn?.addEventListener("click", () => {
-  screen.classList.remove("active");
-  renderPage(renderHomePage);
-});
+  setupNavigation(screen);
 
-
-  // order id
+  // Order ID
   const orderNumber = document.getElementById("orderNumber");
   orderNumber.textContent = `#${order.orderId}`;
 
-  // status text
-  let statusEl = screen.querySelector(".order-status-text");
-  if (!statusEl) {
-    statusEl = document.createElement("div");
-    statusEl.className = "order-status-text";
-    statusEl.style.marginTop = "16px";
-    screen.querySelector(".success-content").appendChild(statusEl);
-  }
-
+  // Status text
+  const statusEl = ensureStatusElement(screen);
   statusEl.textContent = `Status: ${order.status}`;
 
-  // subscribe ONLY to this order
+  // Subscribe ONLY to this order
   const unsubscribe = subscribeToOrderUpdates((updatedOrder) => {
     if (updatedOrder.orderId !== order.orderId) return;
     statusEl.textContent = `Status: ${updatedOrder.status}`;
   });
 
+  // Global event delegation (intentional)
   const cleanupEvents = initEvents();
 
   return () => {
-  unsubscribe();
-  cleanupEvents();
-  statusEl?.remove();
-  screen.classList.remove("active");
-};
+    unsubscribe();
+    cleanupEvents();
+    teardownNavigation(screen);
+    statusEl.remove();
+    screen.classList.remove("active");
+  };
+}
+
+//UI HELPERS 
+
+function ensureStatusElement(screen) {
+  let el = screen.querySelector(".order-status-text");
+
+  if (!el) {
+    el = document.createElement("div");
+    el.className = "order-status-text";
+    el.style.marginTop = "16px";
+    screen.querySelector(".success-content").appendChild(el);
+  }
+
+  return el;
+}
+
+//NAVIGATION 
+
+function setupNavigation(screen) {
+  const btn = document.getElementById("closeSuccessToast");
+  if (!btn) return;
+
+  btn.onclick = () => {
+    screen.classList.remove("active");
+    renderPage(renderHomePage);
+  };
+}
+
+function teardownNavigation() {
+  const btn = document.getElementById("closeSuccessToast");
+  if (btn) btn.onclick = null;
 }

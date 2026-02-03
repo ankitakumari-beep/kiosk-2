@@ -8,18 +8,17 @@ export function restoreCart() {
   hasRestored = true;
 
   const storedItems = loadCart();
-  storedItems.forEach(item => {
+  storedItems.forEach((item) => {
     cart.set(item.productId, {
       productId: item.productId,
-      quantity: item.quantity
+      quantity: item.quantity,
     });
   });
 }
 
-
 export function resetCartSession() {
-  cart.clear();         
-  saveCart([]);         
+  cart.clear();
+  saveCart([]);
 }
 
 export function addToCart(productId) {
@@ -30,7 +29,7 @@ export function addToCart(productId) {
   } else {
     cart.set(productId, {
       productId,
-      quantity: 1
+      quantity: 1,
     });
   }
   persistCart();
@@ -50,17 +49,14 @@ export function removeFromCart(productId) {
   persistCart();
 }
 
-
 export function clearCart() {
   cart.clear();
   persistCart();
 }
 
-
 export function getCartItems() {
   return Array.from(cart.values());
 }
-
 
 function persistCart() {
   saveCart(getCartItems());
@@ -72,4 +68,9 @@ export function getItemQuantity(productId) {
 export function isCartEmpty() {
   return cart.size === 0;
 }
-export function getCartTotal() { return Array.from(cart.values()).reduce( (sum, item) => sum + item.unitPrice * item.quantity, 0 ); }
+export function getCartTotal() {
+  return Array.from(cart.values()).reduce(
+    (sum, item) => sum + item.unitPrice * item.quantity,
+    0,
+  );
+}

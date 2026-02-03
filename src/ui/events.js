@@ -3,13 +3,17 @@ import { renderCart } from "./renderCart.js";
 import { handleCheckout } from "./pages/checkoutPage.js";
 
 export function initEvents() {
+  // single delegated click handler for the whole app
   const handler = async (event) => {
+
+    // open cart modal
     if (event.target.closest("#cartButton")) {
       document.getElementById("cartModal")?.classList.add("active");
       renderCart();
       return;
     }
 
+    // close cart (close button or backdrop click)
     if (
       event.target.id === "closeCartButton" ||
       event.target.id === "cartModal"
@@ -18,6 +22,7 @@ export function initEvents() {
       return;
     }
 
+    // add item to cart (from menu card buttons)
     const menuItem = event.target.closest(".menu-item");
     if (menuItem && event.target.closest(".add-btn, .qty-btn")) {
       const productId = menuItem.dataset.productId;
@@ -26,19 +31,20 @@ export function initEvents() {
       return;
     }
 
+    // proceed to payment details
     if (event.target.closest("#checkoutButton")) {
-      // Close cart
       document.getElementById("cartModal")?.classList.remove("active");
-
-      // Open payment details
       document.getElementById("paymentDetails")?.classList.add("active");
       return;
     }
 
+    // close payment details overlay
     if (event.target.id === "closePaymentDetails") {
       document.getElementById("paymentDetails")?.classList.remove("active");
       return;
     }
+
+    // pay now button – validate inputs and start checkout
     if (event.target.closest("#payNowButton")) {
       const nameInput = document.getElementById("payerName");
       const upiInput = document.getElementById("upiId");
@@ -49,7 +55,7 @@ export function initEvents() {
       const payerName = nameInput?.value.trim();
       const upiId = upiInput?.value.trim();
 
-      // Reset errors
+      // reset previous validation state
       nameError.style.display = "none";
       upiError.style.display = "none";
       nameInput.classList.remove("error");
@@ -73,22 +79,24 @@ export function initEvents() {
 
       if (hasError) return;
 
-      // Close payment details overlay
+      // close payment overlay before starting checkout
       document.getElementById("paymentDetails")?.classList.remove("active");
 
-      // Start checkout
       handleCheckout({ payerName, upiId });
       return;
     }
 
+    // retry payment after error
     if (event.target.closest("#retryPaymentBtn")) {
       document.getElementById("paymentError")?.classList.remove("active");
       handleCheckout(); // retry uses previous details / backend logic
       return;
     }
   };
+
   document.addEventListener("click", handler);
 
+  // cleanup for page unmount
   return () => {
     document.removeEventListener("click", handler);
   };

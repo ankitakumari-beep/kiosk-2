@@ -15,7 +15,6 @@ export async function renderCategoryTabs() {
 
   container.innerHTML = "";
 
-
   const allBtn = document.createElement("button");
   allBtn.className = `category-tab ${active === "ALL" ? "active" : ""}`;
   allBtn.textContent = "All";
@@ -26,7 +25,6 @@ export async function renderCategoryTabs() {
   };
   container.appendChild(allBtn);
 
-  // ---- DB CATEGORIES ----
   for (const c of categories) {
     const btn = document.createElement("button");
     btn.className = `category-tab ${active === c.categoryId ? "active" : ""}`;

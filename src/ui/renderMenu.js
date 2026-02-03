@@ -6,6 +6,7 @@ import {
   getItemQuantity
 } from "/src/state/cartState.js";
 
+// resolve image source (buffer or URL)
 function getProductImageSrc(p) {
   if (p.imageBuffer && p.imageMime) {
     const blob = new Blob(
@@ -21,6 +22,7 @@ export async function renderMenu() {
   const grid = document.getElementById("menuGrid");
   if (!grid) return;
 
+  // load menu + active category
   const activeCategory = getActiveCategory();
   const products = await getMenuView();
 
@@ -31,13 +33,15 @@ export async function renderMenu() {
 
   grid.innerHTML = "";
 
+  // empty category state
   if (!filteredProducts.length) {
     grid.innerHTML = "<p>No items in this category</p>";
     return;
   }
 
+  // render product cards
   for (const p of filteredProducts) {
-    const cartQty = getItemQuantity(p.productId); // ✅ ONLY cart quantity
+    const cartQty = getItemQuantity(p.productId);
     const stockQty = p.availableQuantity ?? Infinity;
 
     const isOutOfStock = stockQty <= 0;
@@ -45,6 +49,7 @@ export async function renderMenu() {
 
     let controlsHTML = "";
 
+    // controls based on cart quantity
     if (cartQty === 0) {
       controlsHTML = `
         <button class="add-btn" ${isOutOfStock ? "disabled" : ""}>+</button>
@@ -79,6 +84,7 @@ export async function renderMenu() {
       </div>
     `;
 
+    // cart actions
     card.querySelector(".add-btn")?.addEventListener("click", () => {
       addToCart(p.productId);
       renderMenu();

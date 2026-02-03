@@ -1,6 +1,5 @@
 import { getAllRecords } from "/src/storage/storage.js";
 
-
 let activeCategoryId = "ALL";
 let categoriesCache = [];
 
