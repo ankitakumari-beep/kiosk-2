@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hyper Kitchen Hub</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- SYSTEM STATUS BAR -->
+    <div class="system-menu-bar">
+      <div class="system-menu-content">
+        <div class="app-title">Hyper Kitchen Hub</div>
+
+        <div class="connectivity-indicators">
+          <div class="indicator" id="wsIndicator">
+            <span class="indicator-label">WS</span>
+            <span class="led"></span>
+          </div>
+          <div class="indicator" id="sseIndicator">
+            <span class="indicator-label">SSE</span>
+            <span class="led"></span>
+          </div>
+          <div class="indicator" id="lpIndicator">
+            <span class="indicator-label">LP</span>
+            <span class="led"></span>
+          </div>
+          <div class="indicator" id="spIndicator">
+            <span class="indicator-label">SP</span>
+            <span class="led"></span>
+          </div>
+          <div class="indicator" id="ppIndicator">
+            <span class="indicator-label">PP</span>
+            <span class="led"></span>
+          </div>
+        </div>
+
+        <div class="sync-counter" id="syncCounter">
+          <span class="sync-icon">🔄</span>
+          <span class="sync-count">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-content">
+        <div>
+          <h1 class="header-title">Kiosk</h1>
+          <p class="header-subtitle">Touch to Order • Fast & Easy</p>
+        </div>
+
+        <button class="cart-button" id="cartButton">
+          Cart
+          <span class="cart-badge hidden" id="cartBadge">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CATEGORY TABS -->
+    <div class="category-tabs">
+      <div class="category-tabs-content">
+        <button class="category-tab active">All Items</button>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="container">
+        <h2 class="section-title">Menu</h2>
+        <div class="menu-grid" id="menuGrid"></div>
+      </div>
+    </main>
+
+    <!-- CART MODAL -->
+    <div class="modal-overlay" id="cartModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Your Order</h2>
+          <button id="closeCartButton">✕</button>
+        </div>
+
+        <div class="modal-body" id="cartItems"></div>
+
+        <div class="modal-footer" id="cartFooter" style="display: none">
+          <span>Total: <span id="totalAmount">₹0</span></span>
+          <button id="checkoutButton">Proceed to Payment</button>
+        </div>
+      </div>
+    </div>
+    <!-- PAYMENT DETAILS OVERLAY -->
+    <div class="modal-overlay" id="paymentDetails">
+      <div class="modal payment-modal">
+        <div class="modal-header">
+          <h2>Payment Details</h2>
+          <button class="close-button" id="closePaymentDetails">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="payment-field">
+            <label for="payerName">Name</label>
+            <input type="text" id="payerName" />
+            <span class="field-error" id="payerNameError"></span>
+          </div>
+
+          <div class="payment-field">
+            <label for="upiId">UPI ID</label>
+            <input type="text" id="upiId" />
+            <span class="field-error" id="upiIdError"></span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="payNowButton" class="checkout-button">Pay Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT LOADING OVERLAY -->
+    <div class="modal-overlay payment-overlay" id="paymentLoading">
+      <div class="modal payment-modal">
+        <div class="modal-body payment-body">
+          <h2 class="payment-title">Processing Payment</h2>
+          <p class="payment-subtitle">
+            Please complete the payment on your device
+          </p>
+          <div class="loader"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT ERROR OVERLAY -->
+    <div class="modal-overlay payment-overlay" id="paymentError">
+      <div class="modal payment-modal">
+        <div class="modal-body payment-body">
+          <h2 class="payment-error-title">Payment Failed or timed out</h2>
+          <p id="paymentErrorMessage" class="payment-subtitle">
+            Something went wrong. Please try again.
+          </p>
+
+          <button class="new-order-button" id="retryPaymentBtn">
+            Try Again
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS SCREEN -->
+    <div class="success-overlay" id="successScreen">
+      <div class="success-content">
+        <h2>Order Confirmed!</h2>
+        <p>Your order number</p>
+        <div id="orderNumber">#000</div>
+        <button id="closeSuccessToast" class="success-close-btn">Start Ordering Again</button>
+      </div>
+    </div>
+    <div class="success-toast" id="successToast">
+      <div class="toast-header">
+        <span>Order Confirmed!</span>
+        <button id="openSuccessOverlay">View</button>
+      </div>
+    </div>
+
+    <!-- MAIN JS -->
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

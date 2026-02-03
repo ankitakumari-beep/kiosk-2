@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin – Hyper Kitchen Hub</title>
+    <link rel="stylesheet" href="./admin.css" />
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="header-content">
+        <h1>
+          <svg
+            class="header-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Hyper Kitchen Hub - Admin Panel
+        </h1>
+        <div class="status-badge" id="statusBadge">
+          <span class="status-dot"></span>
+          <span id="statusText">Connected</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Left Column -->
+      <div class="grid-layout">
+        <div class="left-column">
+          <!-- Toggle Buttons -->
+          <div class="card-toggle-buttons">
+            <button class="toggle-btn active" data-card="add-product">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              Add Product
+            </button>
+            <button class="toggle-btn" data-card="quick-update">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                ></path>
+                <path
+                  d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                ></path>
+              </svg>
+              Quick Update
+            </button>
+          </div>
+
+          <!-- Add Product Section -->
+          <section class="card add-product-card card-view active">
+            <div class="card-header">
+              <h2>
+                <svg
+                  class="section-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                Add New Product
+              </h2>
+            </div>
+
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label for="name">Product Name *</label>
+                  <input
+                    id="name"
+                    type="text"
+                    placeholder="e.g., Chicken Burger"
+                    required
+                  />
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="description">Description</label>
+                  <textarea
+                    id="description"
+                    placeholder="Enter product description"
+                    rows="2"
+                  ></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="productImageInput">Product Image</label>
+                  <div class="image-upload-container">
+                    <input
+                      type="file"
+                      id="productImageInput"
+                      accept="image/*"
+                    />
+                    <img
+                      id="productImagePreview"
+                      class="image-preview"
+                      style="display: none"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="price">Price ($) *</label>
+                  <div class="input-with-icon">
+                    <span class="input-icon">$</span>
+                    <input
+                      id="price"
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="quantity">Stock Quantity *</label>
+                  <div class="input-with-icon">
+                    <span class="input-icon">#</span>
+                    <input
+                      id="quantity"
+                      type="number"
+                      placeholder="0"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="categories">Category</label>
+                  <select id="categories">
+                    <option value="">-- Select Category --</option>
+                  </select>
+                </div>
+              </div>
+
+              <button id="addProductBtn" class="btn btn-primary">
+                <svg
+                  class="btn-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                Add Product
+              </button>
+            </div>
+          </section>
+
+          <!-- Quick Update Section -->
+          <section class="card quick-update-card card-view">
+            <div class="card-header">
+              <h2>
+                <svg
+                  class="section-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                  ></path>
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                  ></path>
+                </svg>
+                Quick Update
+              </h2>
+            </div>
+
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label for="updateProductSelect">Select Product</label>
+                  <select id="updateProductSelect">
+                    <option value="">-- Choose a product --</option>
+                  </select>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="updateTypeSelect">Update Type</label>
+                  <div class="update-type-buttons">
+                    <button
+                      type="button"
+                      class="type-btn active"
+                      data-type="price"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path
+                          d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                        ></path>
+                      </svg>
+                      Price
+                    </button>
+                    <button type="button" class="type-btn" data-type="stock">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                        ></path>
+                      </svg>
+                      Stock
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="updateValue" id="updateValueLabel"
+                    >New Price ($)</label
+                  >
+                  <div class="input-with-icon">
+                    <span class="input-icon" id="updateInputIcon">$</span>
+                    <input
+                      id="updateValue"
+                      type="number"
+                      step="0.01"
+                      placeholder="Enter new value"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <button id="applyUpdateBtn" class="btn btn-update" disabled>
+                <svg
+                  class="btn-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Apply Update
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+          <section class="card products-card">
+            <div class="card-header">
+              <h2>
+                <svg
+                  class="section-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                  ></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                Product Inventory
+                <span id="productCount" class="product-count">0</span>
+              </h2>
+              <div class="search-box">
+                <div style="display: flex; gap: 12px; align-items: center">
+                  <!-- Category Filter -->
+                  <select id="categoryFilter" style="padding: 8px 12px">
+                    <option value="all">All Categories</option>
+                  </select>
+
+                  <!-- Search -->
+                  <div class="search-box">
+                    <svg
+                      class="search-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input
+                      id="searchInput"
+                      type="text"
+                      placeholder="Search products..."
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div id="productList" class="product-list"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script type="module" src="./admin.js"></script>
+  </body>
+</html>

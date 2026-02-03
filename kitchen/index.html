@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kitchen Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./kitchen.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="logo">
+          <span class="logo-icon">🍳</span>
+          <h1>Kitchen Panel</h1>
+        </div>
+        <div class="live-indicator">
+          <span class="pulse-dot"></span>
+          <span id="connectionStatus">Connecting...</span>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="stat-label">Active Orders</span>
+          <span class="stat-value" id="activeOrderCount">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="board">
+    <section class="column-wrapper new-orders">
+      <div class="column-header">
+        <h2>
+          <span class="status-icon"></span>
+          New Orders
+        </h2>
+        <span class="order-count" id="placedCount">0</span>
+      </div>
+      <div id="placedOrders" class="column"></div>
+    </section>
+
+    <section class="column-wrapper preparing-orders">
+      <div class="column-header">
+        <h2>
+          <span class="status-icon"></span>
+          Preparing
+        </h2>
+        <span class="order-count" id="preparingCount">0</span>
+      </div>
+      <div id="preparingOrders" class="column"></div>
+    </section>
+
+    <section class="column-wrapper ready-orders">
+      <div class="column-header">
+        <h2>
+          <span class="status-icon"></span>
+          Ready
+        </h2>
+        <span class="order-count" id="readyCount">0</span>
+      </div>
+      <div id="readyOrders" class="column"></div>
+    </section>
+  </main>
+
+  <script src="./kitchen.js"></script>
+</body>
+</html>
