@@ -10,7 +10,7 @@ function base64ToBuffer(base64) {
 
   return {
     buffer: Buffer.from(data, "base64"),
-    mime
+    mime,
   };
 }
 
@@ -21,48 +21,41 @@ function deriveTags(categoryIds) {
     c3: "salads",
     c4: "pasta",
     c5: "drinks",
-    c6: "desserts"
+    c6: "desserts",
   };
-
-  return (categoryIds || []).map(id => CATEGORY_TAG_MAP[id]).filter(Boolean);
+  return (categoryIds || []).map((id) => CATEGORY_TAG_MAP[id]).filter(Boolean);
 }
 
 export function rehydrateState({
   productsList = [],
   inventoryList = [],
-  priceRulesList = []
+  priceRulesList = [],
 }) {
   console.log("[Rehydrate] Starting server state rehydration");
-
   products.clear();
   inventory.clear();
   prices.clear();
-
-  productsList.forEach(p => {
+  productsList.forEach((p) => {
     products.set(p.productId, {
-  productId: p.productId,
-  name: p.name,
-  description: p.description ?? "",
-  basePrice: p.basePrice,
-  categoryIds: p.categoryIds ?? [],
-  tags: p.tags ?? [],
-  imageBlob: p.imageBlob,
-  imageUrl: p.imageUrl,
-  isActive: p.isActive ?? true
-});
-
+      productId: p.productId,
+      name: p.name,
+      description: p.description ?? "",
+      basePrice: p.basePrice,
+      categoryIds: p.categoryIds ?? [],
+      tags: p.tags ?? [],
+      imageBlob: p.imageBlob,
+      imageUrl: p.imageUrl,
+      isActive: p.isActive ?? true,
+    });
   });
-
-  inventoryList.forEach(i => {
+  inventoryList.forEach((i) => {
     inventory.set(i.productId, i.availableQuantity ?? 0);
   });
-
-  priceRulesList.forEach(rule => {
+  priceRulesList.forEach((rule) => {
     prices.set(rule.productId, rule.basePrice);
   });
-
   console.log(
-    `[Rehydrate] Products: ${products.size}, Inventory: ${inventory.size}, Prices: ${prices.size}`
+    `[Rehydrate] Products: ${products.size}, Inventory: ${inventory.size}, Prices: ${prices.size}`,
   );
 }
 export function createProduct({
@@ -73,44 +66,38 @@ export function createProduct({
   availableQuantity = 0,
   categoryIds = [],
   isActive = true,
-  imageBase64       
+  imageBase64,
 }) {
-
   const product = {
-  productId,
-  name,
-  description,
-  basePrice,
-  categoryIds,
-  tags: deriveTags(categoryIds), 
-  isActive
-};
-console.log(
-  "[ENGINE] createProduct image:",
-  imageBase64 ? "YES" : "NO"
-);
+    productId,
+    name,
+    description,
+    basePrice,
+    categoryIds,
+    tags: deriveTags(categoryIds),
+    isActive,
+  };
+  console.log("[ENGINE] createProduct image:", imageBase64 ? "YES" : "NO");
 
-// attach image
-if (imageBase64) {
-  const { buffer, mime } = base64ToBuffer(imageBase64);
-  product.imageBuffer = buffer;
-  product.imageMime = mime;
-}
+  // attach image
+  if (imageBase64) {
+    const { buffer, mime } = base64ToBuffer(imageBase64);
+    product.imageBuffer = buffer;
+    product.imageMime = mime;
+  }
 
-products.set(productId, product);
-
+  products.set(productId, product);
 
   prices.set(productId, basePrice);
   inventory.set(productId, availableQuantity);
 
   broadcastSSE({
-  type: "PRODUCT_CREATED",
-  product: {
-    ...product,
-    availableQuantity
-  }
-});
-
+    type: "PRODUCT_CREATED",
+    product: {
+      ...product,
+      availableQuantity,
+    },
+  });
 }
 
 export function updateProduct(productId, updates) {
@@ -121,11 +108,10 @@ export function updateProduct(productId, updates) {
       type: "PRICE_UPDATE",
       productId,
       newPrice: updates.basePrice,
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     });
   }
 }
-
 
 export function updateInventory(productId, availableQuantity) {
   inventory.set(productId, availableQuantity);
@@ -134,7 +120,7 @@ export function updateInventory(productId, availableQuantity) {
     type: "INVENTORY_UPDATE",
     productId,
     availableQuantity,
-    updatedAt: Date.now()
+    updatedAt: Date.now(),
   });
 }
 
@@ -145,14 +131,14 @@ export function deleteProduct(productId) {
 
   broadcastSSE({
     type: "PRODUCT_DELETED",
-    productId
+    productId,
   });
 }
 
 export function getAllProducts() {
-  return Array.from(products.values()).map(p => ({
+  return Array.from(products.values()).map((p) => ({
     ...p,
     availableQuantity: inventory.get(p.productId),
-    basePrice: prices.get(p.productId)
+    basePrice: prices.get(p.productId),
   }));
 }
