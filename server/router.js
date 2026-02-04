@@ -4,6 +4,7 @@ import { orderRoutes } from "./routes/order.routes.js";
 import { paymentRoutes } from "./routes/payment.routes.js";
 import { sseRoutes } from "./routes/sse.routes.js";
 import { staticRoutes } from "./routes/static.routes.js";
+import { healthRoutes } from "./routes/health.routes.js";
 
 export async function router(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -20,8 +21,10 @@ export async function router(req, res) {
   if (orderRoutes(req, res)) return;
   if (paymentRoutes(req, res)) return;
   if (sseRoutes(req, res)) return;
+  if(healthRoutes(req,res))return;
   if (staticRoutes(req, res)) return;
-
+ if (!res.writableEnded) {
   res.writeHead(404);
   res.end("Not Found");
+}
 }

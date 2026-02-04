@@ -53,31 +53,44 @@ export function initPayment(req, res) {
 export function pollPaymentStatus(req, res, paymentId) {
   const start = Date.now();
   const TIMEOUT = 30000;
+  let finished = false;
+
+  const finish = (statusCode, payload) => {
+    if (finished || res.writableEnded) return;
+    finished = true;
+
+    clearInterval(interval);
+
+    if (payload) {
+      res.writeHead(statusCode, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(payload));
+    } else {
+      res.writeHead(statusCode);
+      res.end();
+    }
+  };
 
   const interval = setInterval(() => {
     const payment = payments.get(paymentId);
 
     if (!payment) {
-      clearInterval(interval);
-      res.writeHead(404);
-      return res.end();
+      return finish(404);
     }
 
     if (payment.status !== "PENDING") {
-      clearInterval(interval);
-      res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(
-        JSON.stringify({
-          status: payment.status,
-          updatedAt: payment.updatedAt,
-        })
-      );
+      return finish(200, {
+        status: payment.status,
+        updatedAt: payment.updatedAt,
+      });
     }
 
     if (Date.now() - start > TIMEOUT) {
-      clearInterval(interval);
-      res.writeHead(204); 
-      return res.end();
+      return finish(204); 
     }
   }, 1000);
+
+  req.on("close", () => {
+    clearInterval(interval);
+    finished = true;
+  });
 }
