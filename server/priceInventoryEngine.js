@@ -37,16 +37,17 @@ export function rehydrateState({
   prices.clear();
   productsList.forEach((p) => {
     products.set(p.productId, {
-      productId: p.productId,
-      name: p.name,
-      description: p.description ?? "",
-      basePrice: p.basePrice,
-      categoryIds: p.categoryIds ?? [],
-      tags: p.tags ?? [],
-      imageBlob: p.imageBlob,
-      imageUrl: p.imageUrl,
-      isActive: p.isActive ?? true,
-    });
+  productId: p.productId,
+  name: p.name,
+  description: p.description ?? "",
+  basePrice: p.basePrice,
+  categoryIds: p.categoryIds ?? [],
+  tags: p.tags ?? [],
+  imageBuffer: p.imageBuffer,
+  imageMime: p.imageMime,
+  imageUrl: p.imageUrl,
+  isActive: p.isActive ?? true,
+});
   });
   inventoryList.forEach((i) => {
     inventory.set(i.productId, i.availableQuantity ?? 0);
@@ -142,3 +143,16 @@ export function getAllProducts() {
     basePrice: prices.get(p.productId),
   }));
 }
+export function updateProductImage(productId, imageBuffer, imageMime) {
+  console.log("[ENGINE] updateProductImage", productId);
+
+  // 🔥 Delta update ONLY (like price / inventory)
+  broadcastSSE({
+    type: "PRODUCT_IMAGE_UPDATED",
+    productId,
+    imageBuffer,
+    imageMime,
+    updatedAt: Date.now(),
+  });
+}
+

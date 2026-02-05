@@ -148,3 +148,17 @@ export function hasRecord(storeName, key) {
     }
   });
 }
+
+export function getRecord(storeName, key) {
+  return new Promise((resolve, reject) => {
+    try {
+      const store = getObjectStore(storeName, "readonly");
+      const request = store.get(key);
+
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}

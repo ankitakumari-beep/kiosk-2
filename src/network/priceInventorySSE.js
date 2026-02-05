@@ -1,4 +1,4 @@
-import { updateRecord } from "../storage/storage.js";
+import { updateRecord ,getRecord} from "../storage/storage.js";
 import { renderMenu } from "../ui/renderMenu.js";
 import { connectionLEDs } from "../ui/components/connectionLED.js";
 import { renderCart } from "../ui/renderCart.js";
@@ -13,6 +13,7 @@ export function startPriceInventorySSE() {
 
   eventSource.onmessage = async (event) => {
     connectionLEDs.sseConnected();
+    console.log(event);
     const data = JSON.parse(event.data);
     console.log(data);
     const product = data.product;
@@ -73,6 +74,21 @@ export function startPriceInventorySSE() {
       await renderMenu();
       await renderCart();
     }
+ if (data.type === "PRODUCT_IMAGE_UPDATED") {
+  console.log("[KIOSK] IMAGE UPDATE", data.productId);
+
+  const existing = await getRecord("products", data.productId);
+  if (!existing) return;
+
+  await updateRecord("products", {
+    ...existing,
+    imageBuffer: data.imageBuffer,
+    imageMime: data.imageMime,
+  });
+
+  await renderMenu();
+  await renderCart();
+}
   };
 
   eventSource.onerror = () => {

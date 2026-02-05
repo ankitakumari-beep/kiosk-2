@@ -128,7 +128,7 @@ body {
 
 .grid-layout {
   display: grid;
-  grid-template-columns: 420px 1fr;
+  grid-template-columns: 600px 1fr;
   gap: 24px;
   align-items: start;
 }
@@ -143,7 +143,7 @@ body {
 
 .card-toggle-buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
@@ -840,4 +840,24 @@ textarea {
   .card-toggle-buttons {
     grid-template-columns: 1fr;
   }
+}
+.bulk-preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.bulk-preview-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.bulk-preview-item img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
 }

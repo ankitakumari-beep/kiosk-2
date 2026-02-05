@@ -6,7 +6,7 @@ import { initCardToggle } from "./ui/cardToggle.js";
 import { initFilters } from "./ui/filters.js";
 import { initFormHandlers } from "./ui/formHandler.js";
 import { initQuickUpdate } from "./ui/quickUpdate.js";
-
+import { initBulkImageUpload } from "./ui/bulkImageUpload.js";
 async function initAdmin() {
   try {
     await initStorage();
@@ -19,7 +19,7 @@ async function initAdmin() {
     initCardToggle();
     initAdminSSE();
     initQuickUpdate();
-
+    initBulkImageUpload();
     console.log("[Admin] Initialized");
   } catch (err) {
     console.error("[Admin] Init failed", err);

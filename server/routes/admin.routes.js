@@ -6,6 +6,8 @@ import {
   deleteProduct
 } from "../priceInventoryEngine.js";
 import { updateOrderStatus } from "../orderStore.js";
+import { updateProductImage } from "../priceInventoryEngine.js";
+import { getAllRecords,updateRecord } from "../../src/storage/storage.js";
 
 export async function adminRoutes(req, res) {
   if (req.method === "POST" && req.url === "/admin/product") {
@@ -13,6 +15,28 @@ export async function adminRoutes(req, res) {
     createProduct(body);
     res.writeHead(200);
     return res.end(JSON.stringify({ status: "PRODUCT_CREATED" }));
+  }
+  if (
+    req.method === "PATCH" &&
+    req.url.startsWith("/admin/product/") &&
+    req.url.endsWith("/image")
+  ) {
+    const productId = req.url.split("/")[3];
+    const body = await parseBody(req);
+    const { imageBuffer, imageMime } = body;
+
+    console.log("[ADMIN] image upload called", productId);
+
+    if (!imageBuffer || !imageMime) {
+      res.writeHead(400);
+      return res.end(JSON.stringify({ error: "INVALID_IMAGE_DATA" }));
+    }
+
+    // 🔥 runtime + SSE ONLY
+    updateProductImage(productId, imageBuffer, imageMime);
+
+    res.writeHead(200);
+    return res.end(JSON.stringify({ status: "IMAGE_UPDATED" }));
   }
 
   if (req.method === "PATCH" && req.url.startsWith("/admin/product/")) {
