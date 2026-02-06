@@ -16,21 +16,31 @@ export function renderOrderStatusPage(order) {
 
   // Order ID
   const orderNumber = document.getElementById("orderNumber");
-  orderNumber.textContent = `#${order.orderId}`;
+ orderNumber.textContent = order.orderNumber
+  ? `#${order.orderNumber}`
+  : "Assigning order number…";
+
 
   // Status text
   const statusEl = ensureStatusElement(screen);
   statusEl.textContent = `Status: ${order.status}`;
 
   // Subscribe ONLY to this order
+  // const unsubscribe = subscribeToOrderUpdates((updatedOrder) => {
+  //   if (updatedOrder.orderId !== order.orderId) return;
+  //   statusEl.textContent = `Status: ${updatedOrder.status}`;
+  // });
+
   const unsubscribe = subscribeToOrderUpdates((updatedOrder) => {
-    if (updatedOrder.orderId !== order.orderId) return;
-    statusEl.textContent = `Status: ${updatedOrder.status}`;
-  });
+  if (updatedOrder.orderId !== order.orderId) return;
 
-  // Global event delegation (intentional)
+  statusEl.textContent = `Status: ${updatedOrder.status}`;
+
+  if (updatedOrder.orderNumber) {
+    orderNumber.textContent = `#${updatedOrder.orderNumber}`;
+  }
+});
   const cleanupEvents = initEvents();
-
   return () => {
     unsubscribe();
     cleanupEvents();

@@ -146,7 +146,6 @@ export function getAllProducts() {
 export function updateProductImage(productId, imageBuffer, imageMime) {
   console.log("[ENGINE] updateProductImage", productId);
 
-  // 🔥 Delta update ONLY (like price / inventory)
   broadcastSSE({
     type: "PRODUCT_IMAGE_UPDATED",
     productId,

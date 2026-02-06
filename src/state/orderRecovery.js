@@ -1,6 +1,7 @@
-import { getAllRecords, updateRecord } from "../storage/storage.js";
+import { getAllRecords } from "../storage/storage.js";
+import { enqueueOrder } from "../queue/offlineQueue.js";
+import { startOrderTracking } from "../network/orderLiveTracker.js";
 
-const API_BASE = "http://localhost:3000";
 const ACTIVE_ORDER_STATUSES = ["PLACED", "ACCEPTED", "PREPARING"];
 
 export async function rehydrateActiveOrders() {
@@ -15,21 +16,9 @@ export async function rehydrateActiveOrders() {
   console.log(`[Rehydrate] Replaying ${activeOrders.length} active orders`);
 
   for (const order of activeOrders) {
-    await rehydrateOrder(order);
-  }
-}
-
-async function rehydrateOrder(order) {
-  try {
-    await fetch(`${API_BASE}/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(order),
-    });
-
-    order.serverRehydrated = true;
-    await updateRecord("orders", order);
-  } catch {
-    console.warn("[Rehydrate] Failed for order", order.orderId);
+    startOrderTracking(order.orderId);
+    if (!order.synced) {
+      await enqueueOrder(order);
+    }
   }
 }

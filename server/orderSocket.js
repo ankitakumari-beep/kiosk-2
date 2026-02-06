@@ -27,7 +27,6 @@ export function initOrderSocket(server) {
         return;
       }
 
-      // 🔹 Kitchen → Server
       if (msg.type === "KITCHEN_ACTION") {
         updateOrderStatus(msg.orderId, msg.status);
 

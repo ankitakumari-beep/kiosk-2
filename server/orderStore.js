@@ -2,6 +2,40 @@ import { broadcastOrderCreated, broadcastOrderUpdated } from "./orderSocket.js";
 
 const orders = new Map();
 
+// export async function handleCreateOrder(req, res) {
+//   let body = "";
+
+//   req.on("data", (chunk) => {
+//     body += chunk.toString();
+//   });
+
+//   req.on("end", () => {
+//     try {
+//       const order = JSON.parse(body);
+//       if (orders.has(body.orderId)) {
+//         res.writeHead(200, { "Content-Type": "application/json" });
+//         return res.end(JSON.stringify({ status: "ALREADY_EXISTS" }));
+//       }
+//       orders.set(order.orderId, {
+//         ...order,
+//         status: "PLACED",
+//         timestamp: Date.now()
+//       });
+//       broadcastOrderCreated(orders.get(order.orderId));
+
+//       console.log("[Server] Order accepted:", order.orderId);
+
+//       // startLifecycle(order.orderId);
+
+//       res.writeHead(201, { "Content-Type": "application/json" });
+//       res.end(JSON.stringify({ success: true }));
+//     } catch (err) {
+//       res.writeHead(400);
+//       res.end("Invalid order payload");
+//     }
+//   });
+// }
+
 export async function handleCreateOrder(req, res) {
   let body = "";
 
@@ -11,24 +45,31 @@ export async function handleCreateOrder(req, res) {
 
   req.on("end", () => {
     try {
-      const order = JSON.parse(body);
-      if (orders.has(body.orderId)) {
+      const incomingOrder = JSON.parse(body);
+
+      // Prevent duplicate sync
+      if (orders.has(incomingOrder.orderId)) {
         res.writeHead(200, { "Content-Type": "application/json" });
         return res.end(JSON.stringify({ status: "ALREADY_EXISTS" }));
       }
-      orders.set(order.orderId, {
-        ...order,
+      console.log("[Server] Incoming payload:", incomingOrder);
+
+      const order = {
+        ...incomingOrder,
         status: "PLACED",
         timestamp: Date.now()
-      });
-      broadcastOrderCreated(orders.get(order.orderId));
+      };
 
-      console.log("[Server] Order accepted:", order.orderId);
+      orders.set(order.orderId, order);
 
-      // startLifecycle(order.orderId);
+      broadcastOrderCreated(order);
+
+      console.log(
+        `[Server] Order accepted: ${order.orderId} → #${orderNumber}`
+      );
 
       res.writeHead(201, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ success: true }));
+      res.end(JSON.stringify(order)); // return full order
     } catch (err) {
       res.writeHead(400);
       res.end("Invalid order payload");

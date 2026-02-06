@@ -8,7 +8,7 @@ import { syncQueue } from "../queue/offlineQueue.js";
 import { startPriceInventorySSE } from "../network/priceInventorySSE.js";
 import { startConnectivityAuditor } from "../network/connectivityAuditor.js";
 import { rehydrateActiveOrders } from "../state/orderRecovery.js";
-
+import { initOrderCounterFromDB } from "../state/orderCounter.js";
 export async function initApp() {
   console.log("[InitApp] Starting application");
   await bootstrapLocalState();
@@ -24,9 +24,10 @@ export async function initApp() {
 
 async function bootstrapLocalState() {
   await initStorage();
+  await initOrderCounterFromDB();
   await loadMenuFromStorage();
   restoreCart();
-  syncQueue();
+  //syncQueue();
 }
 
 function bootstrapNetwork() {

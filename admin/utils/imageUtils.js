@@ -2,8 +2,8 @@ export function getProductImageSrc(p) {
   if (p.imageBuffer && p.imageMime) {
     const bytes =
       Array.isArray(p.imageBuffer)
-        ? p.imageBuffer          // NEW: image update flow
-        : p.imageBuffer.data;    // OLD: product creation flow
+        ? p.imageBuffer         
+        : p.imageBuffer.data;    
 
     const blob = new Blob(
       [new Uint8Array(bytes)],

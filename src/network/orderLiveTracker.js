@@ -10,7 +10,8 @@ export function startOrderTracking(orderId) {
       console.log("[Tracker] Update received:", update);
       updateOrderStatus(
       update.order.orderId,
-      update.order.status
+      update.order.status,
+      update.order.orderNumber
     );
     },
     () => {

@@ -19,7 +19,6 @@ export function initBulkImageUpload() {
     list.innerHTML = "";
 
     [...input.files].forEach((file, index) => {
-      // UI preview (cheap)
       const img = document.createElement("img");
       img.src = URL.createObjectURL(file);
 
@@ -46,7 +45,6 @@ export function initBulkImageUpload() {
         validate();
       };
 
-      // 🔥 offload heavy work
       worker.postMessage({ file, index });
     });
   });

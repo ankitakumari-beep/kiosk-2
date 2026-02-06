@@ -162,3 +162,36 @@ export function getRecord(storeName, key) {
     }
   });
 }
+
+export function getLastRecordByCreatedAt(storeName) {
+  return new Promise((resolve, reject) => {
+    try {
+      const store = getObjectStore(storeName, "readonly");
+      let latest = null;
+
+      const request = store.openCursor();
+
+      request.onsuccess = (event) => {
+        const cursor = event.target.result;
+        if (cursor) {
+          const value = cursor.value;
+
+          if (
+            typeof value.createdAt === "number" &&
+            (!latest || value.createdAt > latest.createdAt)
+          ) {
+            latest = value;
+          }
+
+          cursor.continue();
+        } else {
+          resolve(latest); 
+        }
+      };
+
+      request.onerror = () => reject(request.error);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}

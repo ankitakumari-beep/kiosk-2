@@ -32,7 +32,7 @@ export async function adminRoutes(req, res) {
       return res.end(JSON.stringify({ error: "INVALID_IMAGE_DATA" }));
     }
 
-    // 🔥 runtime + SSE ONLY
+
     updateProductImage(productId, imageBuffer, imageMime);
 
     res.writeHead(200);

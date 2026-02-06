@@ -24,12 +24,15 @@ export function subscribeToOrderUpdates(cb) {
   return () => orderListeners.delete(cb);
 }
 
-export async function updateOrderStatus(orderId, status) {
+export async function updateOrderStatus(orderId, status,orderNumber) {
   const orders = await getAllRecords("orders");
   const order = orders.find(o => o.orderId === orderId);
   if (!order || order.status === status) return;
 
   order.status = status;
+  if (orderNumber && !order.orderNumber) {
+    order.orderNumber = orderNumber;
+  }
   order.updatedAt = Date.now();
 
   await updateRecord("orders", order);

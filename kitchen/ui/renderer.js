@@ -44,7 +44,9 @@ function createOrderCard(order) {
 
   div.innerHTML = `
     <div class="order-header">
-      <div class="order-id">${order.orderId}</div>
+     <div class="order-id">
+  ${order.orderNumber ? `#${order.orderNumber}` : "Assigning…"}
+</div>
       <div class="order-time">${formatTime(order.timestamp)}</div>
     </div>
     <div class="order-items">
