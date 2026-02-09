@@ -7,7 +7,6 @@ import {
 } from "../priceInventoryEngine.js";
 import { updateOrderStatus } from "../orderStore.js";
 import { updateProductImage } from "../priceInventoryEngine.js";
-import { getAllRecords,updateRecord } from "../../src/storage/storage.js";
 
 export async function adminRoutes(req, res) {
   if (req.method === "POST" && req.url === "/admin/product") {
